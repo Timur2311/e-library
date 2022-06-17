@@ -1,0 +1,27 @@
+{% extends "shop/base.html" %} {% load static %} {% block title %}Feedbakcs{% endblock %} {% block content %}
+
+<h1>Сообщение от пользователей</h1>
+
+<div class="container">
+  <div class="row">
+    {% for contact in object_list %}
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-action active mb-2">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Сообщение от {{contact.name}}</h5>
+            </div>
+            <hr>
+            <p class="mb-1">{{contact.client_message}} lorem100</p>
+            <hr>
+            <strong>Контактные данные - {{contact.callback}}</strong>
+        </li>
+    </ul>
+
+    <hr />
+    {% empty %}
+    <p>Нет никаких сообщении</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

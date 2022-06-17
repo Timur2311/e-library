@@ -1,0 +1,48 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Вход{% endblock title %}
+
+{% block content %}
+
+
+<h1 style="text-align:center; margin-top:20px; margin-bottom:30px">Вход в аккаунт</h1>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-4">
+            {% if form.errors %}
+    <p>
+        Имя или пароль введены неправильно. Пожалуйста, попробуйте заново.
+    </p>
+{% else %}
+    <p>
+        Пожалуйста, пополните следующую форму. Если у вас нет аккаунта, вы можете 
+        <a href="{% url "account:register" %}">зарегистрироваться отсюда</a>
+    </p>
+{% endif %}
+<div class="login-form">
+    <form  method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        {% comment %} <input type="hidden" name="next" value="{{ next }}"/> {% endcomment %}
+        <p><input type="submit" value="Войти"></p>
+    </form>
+</div>
+
+<div>
+    <p>
+        <a href="{% url "account:password_reset" %}">Забыли свой пароль?</a>
+    </p>
+</div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

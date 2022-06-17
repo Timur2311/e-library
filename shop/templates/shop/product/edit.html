@@ -1,0 +1,22 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Изменение{% endblock %}
+
+{% block content %}
+    {% if product.type == "book" %}
+        <h1>Измените книгу</h1>
+    {% elif product.type == "article" %}
+        <h1>Измените статью</h1>
+    {% endif %}
+    <p>Вы можете изменить данные  с помощью последующей формы:</p>
+    <div style="margin-top: 50px">
+        <form  action = "{% url 'shop:edit_product' product.id product.slug product.type %}" enctype="multipart/form-data" method="post">
+            <div class="form-class">    
+                {{product_form.as_p}}
+                {% csrf_token %}
+                <p><input type="submit" value="Сохранить данные"></p>
+            </div> 
+            
+        </form>
+    </div>
+{% endblock %}

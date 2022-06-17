@@ -1,0 +1,17 @@
+{% extends "shop/base.html" %} {% load static %} {% block title %}Feedbakcs{% endblock %} 
+{% block content %}
+
+<h1>Фидбеки пользователей</h1>
+<ul>
+  {% for feedback in object_list %}
+  <ul class="list-group">
+    <li href="#" class="list-group-item list-group-item-action active mb-2">
+      <p class="mb-1">{{ feedback.text }}</p>
+    </li>
+  </ul>
+  {% empty %}
+  <li>Ещё нет никаких фидбеков</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

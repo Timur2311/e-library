@@ -1,0 +1,66 @@
+{% extends "shop/base.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="container">
+    <div class="row">
+      <div class="product-detail col-md-12" style="margin-top: 50px;">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}
+        {% static "img/no_image.png" %}{% endif %}">
+        <h1>{{ product.name }}</h1>       
+        {{ product.description|linebreaks }}
+        {{ product.content|safe }}
+        {% if product.type == "book"%}
+          <div >
+            <a class="btn btn-primary" role="button" href="{{product.file.url}}" download="donwload">Скачать Книгу</a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-md-12"> 
+        {% with comments.count as total_comments %}
+          <h2>
+            {{ total_comments }} комментарии
+          </h2>
+        {% endwith %}
+
+        {% for comment in comments %}
+          <div class="comment">
+            <p class="info">
+                Комментария от {{ comment.name }}
+                {{ comment.created }}
+            </p>
+            {{ comment.body|linebreaks }}
+          </div>
+        {% empty %}
+          <p>Ещё нет комментариев</p>
+        {% endfor %}
+
+        {% if new_comment %}
+          <h2>Ваша комментария добавлена</h2>
+          <br>
+          <h2>Добавить новую комментарию</h2>
+          <form action="{% url "shop:product_detail" product.id product.slug %}" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Добавить комментарии"></p>
+          </form>
+        {% else %}
+          <h2>Добавить новую комментарию</h2>
+          <form action="{% url "shop:product_detail" product.id product.slug %}" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Добавить комментарии"></p>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

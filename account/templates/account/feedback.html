@@ -1,0 +1,27 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div style="margin-top:100px" class="container">
+    <div class="row">
+        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="row">
+        <form action="{% url 'shop:send_feedback' %}" method="POST">
+            {{form.as_p}}
+            {% csrf_token %}
+            <a href=""><button type="submit" class="btn btn-primary"> Отправить</button></a>
+        </form>
+        
+    </div>
+
+</div>
+
+{% endblock %}

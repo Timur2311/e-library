@@ -1,0 +1,22 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div style="margin-top:100px" class="container">
+    <div class="row">
+        <form class="form-group" action="{% url 'shop:contact_us' %}" method="POST">
+            {{form.as_p}}
+            {% csrf_token %}
+            <a href=""><button type="submit" class="btn btn-primary"> Отправить</button></a>
+        </form>
+        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                            {{ message }}
+                        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

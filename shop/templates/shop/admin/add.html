@@ -1,0 +1,21 @@
+{% extends "shop/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Добавить Книгу
+{% endblock %}
+
+{% block content %}
+    <div style="margin-top: 50px">
+        <form action="{% url "shop:add_product" "books" %}" method="post"  enctype="multipart/form-data">
+            <div class="form-class">
+                
+                {{form.as_p}}
+                {% csrf_token %}
+                <p><input type="submit" value="Сохранить данные"></p>
+            </div>  
+            
+        </form>
+    </div>
+{% endblock content %}

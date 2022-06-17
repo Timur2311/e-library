@@ -1,0 +1,97 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+      
+<div class="container">
+    <div class="row">
+        <nav class='animated bounceInDown col-md-3' id="sidebar">
+            <h3>Категории</h3>
+            <ul>
+                <li  {% if not genr and not category %}class="selected"{% endif %} ><a class="dropdown-item" href="{% url "shop:product_list" %}">Все данные</a></li>
+                {% for c in categories %}
+                    
+                    {% if c.slug == "books"%}
+                        <li class='sub-menu'><a class="dropdown-item" href='#'>Книги<div class='fa fa-caret-down right'></div></a>
+                            <ul>
+                                {% for genre in genres %}  
+                                    <li {% if genr.slug == genre.slug %}class="selected active" {% endif %}><a class="dropdown-item" href='{{genre.get_absolute_url}}'>{{genre.name}}</a></li>
+                                {% endfor %}
+                                <div class="dropdown-divider"></div>
+                                <li {% if category.slug == c.slug %}class="selected" {% endif %}>
+                                    <a class="dropdown-item" href="{{c.get_absolute_url}}">Все Книги</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li  {% if category.slug == c.slug %}class="selected" {% endif %}><a class="dropdown-item" href='{{c.get_absolute_url}}'>{{c.name}}</a></li>
+                    {% endif %}                    
+                {% endfor %}
+            </ul>
+        </nav>
+    
+        <div id="main" class="product-list col-md-9" >
+           <div class="row">
+                {% for product in page_obj %}
+                    <div class="item">
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" width="100" height="150">
+                        </a>
+                        <a href="{{ product.get_absolute_url }}">
+                            {{ product.name }}
+                         </a>  
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+
+        </div>
+        
+        <div class="col-md-6 mt-4">
+            <ul class="pagination justify-content-center mb-4">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                    <a class='page-link' href='?page=1'>Первая</a>
+                    </li>
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.previous_page_number }}'>&laquo;</a>
+                    </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item disabled">
+                        <a class='page-link' href='?page={{ num }}'>{{ num }}</a>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class='page-link' href='?page={{ num }}'>{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.next_page_number }}'>&raquo;</a>
+                    </li>
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.paginator.num_pages }}'>Последняя</a>
+                    </li>
+                {% endif %}
+            </ul>
+        
+        </div>                
+    </div> 
+</div>
+
+    <script>
+        $('.sub-menu ul').hide();
+        $(".sub-menu a").click(function () {
+	        $(this).parent(".sub-menu").children("ul").slideToggle("100");
+	        $(this).find(".right").toggleClass("fa-caret-up fa-caret-down");
+        });
+    </script>
+
+{% endblock %}

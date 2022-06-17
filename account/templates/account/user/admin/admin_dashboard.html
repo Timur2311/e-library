@@ -1,0 +1,147 @@
+{% extends "shop/base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+
+<div class="container-xl">
+    <div class="row">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2><b>Управления книг и статьями</b></h2>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <a href="{% url "shop:add_product" "books" %}" class="btn btn-success" > <span>Добавить книгу</span></a>
+                            <a href="{% url "shop:add_product" "articles" %}" class="btn btn-success" > <span>Добавить статью</span></a>
+                                                
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="selectAll">
+                                    <label for="selectAll"></label>
+                                </span>
+                            </th>
+                            <th>Название</th>
+                            <th>Автор</th>
+                            
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in page_obj %}
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+    
+                                <td><a href="{{ product.get_absolute_url }}">{{product.name}}</a></td>
+                                <td>{{product.author}}</td>
+                                <td>
+                                    <a href="{% url "shop:edit_product" product.id product.slug product.type %} " class="edit"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <a href="#deleteEmployeeModal" class="delete" data-id="{{product.id}}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}                               
+                    </tbody>
+                </table>              
+                    
+                </div>
+        </div>
+    </div> 
+    <div class="row">
+        <div class="col-md-6"></div>
+        <div class="col-md-6 mt-4">
+            <ul class="pagination justify-content-center mb-4">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                    <a class='page-link' href='?page=1'>Первая</a>
+                    </li>
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.previous_page_number }}'>&laquo;</a>
+                    </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item disabled">
+                        <a class='page-link' href='?page={{ num }}'>{{ num }}</a>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class='page-link' href='?page={{ num }}'>{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.next_page_number }}'>&raquo;</a>
+                    </li>
+                    <li class="page-item">
+                    <a class='page-link' href='?page={{ page_obj.paginator.num_pages }}'>Последняя</a>
+                    </li>
+                {% endif %}
+            </ul>        
+        </div> 
+    </div>       
+</div>
+
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form >
+                <div class="modal-header">						
+                    <h4 class="modal-title">Удалить Книгу</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">					
+                    <p>Вы действительно хотите удалить эту книгу?</p>
+                    <p class="text-warning"><small>Это действие не может быть отменено.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete" name="delete_book" >
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $(document).on("click", ".delete", function () {
+        console.log("akjsdnakjsdnkjan")
+        var productId = $(this).data('id');
+        console.log(productId)
+        $("#deleteEmployeeModal input[type='submit']").val( productId );
+        
+        // As pointed out in comments, 
+        // it is unnecessary to have to manually call the modal.
+        // $('#addBookDialog').modal('show');
+   });
+</script>
+
+{% endblock %}
