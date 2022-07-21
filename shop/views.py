@@ -78,7 +78,6 @@ def add_product(request, type):
     elif type == "articles":
         category = Category.objects.get(slug="articles")
         if request.method == "POST":
-            print('postga kiryapti')
             my_form = ArticleForm(data = request.POST, files =  request.FILES)
             print(request.POST)
             if my_form.is_valid():
@@ -95,11 +94,9 @@ def add_product(request, type):
 
 
 @login_required 
-def product_list(request, category_slug = None, genre_slug = None ):
-    
+def product_list(request, category_slug = None, genre_slug = None ):    
     if request.user.is_superuser:
-        return redirect("account:admin_dashboard")   
-    
+        return redirect("account:admin_dashboard")       
     category = None
     genre = None
     categories = Category.objects.all()
